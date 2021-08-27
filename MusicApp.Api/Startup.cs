@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,18 +31,7 @@ namespace MusicApp.Api
             {
                 app.UseDeveloperExceptionPage();
 
-                // Allow any origin for development purposes
-                app.UseCors(builder =>
-                {
-                    // AllowAnyOrigin and AllowCredentials can't be used together
-                    // https://stackoverflow.com/questions/53675850/how-to-fix-the-cors-protocol-does-not-allow-specifying-a-wildcard-any-origin
-                    builder
-                    .SetIsOriginAllowed(_ => true)
-                    //.AllowAnyOrigin()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .AllowCredentials();
-                });
+                app.UseCors(builder => AllowAllCors(builder));
             } else
             {
                 app.UseCors();
@@ -53,6 +43,21 @@ namespace MusicApp.Api
             {
                 endpoints.MapControllers();
             });
+        }
+
+        // Allow any origin for development purposes
+        private CorsPolicyBuilder AllowAllCors(CorsPolicyBuilder builder)
+        {
+            // AllowAnyOrigin and AllowCredentials can't be used together
+            // https://stackoverflow.com/questions/53675850/how-to-fix-the-cors-protocol-does-not-allow-specifying-a-wildcard-any-origin
+            builder
+            .SetIsOriginAllowed(_ => true)
+            //.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials();
+
+            return builder;
         }
     }
 
