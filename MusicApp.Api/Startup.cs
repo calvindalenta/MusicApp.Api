@@ -1,18 +1,9 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using MusicApp.Api.Repositories;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace MusicApp.Api
 {
@@ -38,12 +29,23 @@ namespace MusicApp.Api
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-            }
 
-            app.UseCors(builder =>
+                // Allow any origin for development purposes
+                app.UseCors(builder =>
+                {
+                    // AllowAnyOrigin and AllowCredentials can't be used together
+                    // https://stackoverflow.com/questions/53675850/how-to-fix-the-cors-protocol-does-not-allow-specifying-a-wildcard-any-origin
+                    builder
+                    .SetIsOriginAllowed(_ => true)
+                    //.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials();
+                });
+            } else
             {
-                builder.WithOrigins("http://127.0.0.1:5500").AllowAnyMethod().AllowAnyHeader().AllowCredentials();
-            });
+                app.UseCors();
+            }
 
             app.UseRouting();
 
