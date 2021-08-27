@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using MusicApp.Api.Repositories;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -28,7 +29,7 @@ namespace MusicApp.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddTracks(Configuration);
+            services.AddSingleton<IRepository, AudioRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,7 +49,7 @@ namespace MusicApp.Api
         }
     }
 
-    public static class TracksExtension
+/*    public static class TracksExtension
     {
         public static IServiceCollection AddTracks(this IServiceCollection services, IConfiguration config)
         {
@@ -60,5 +61,5 @@ namespace MusicApp.Api
             services.AddSingleton(tracks);
             return services;
         }
-    }
+    }*/
 }

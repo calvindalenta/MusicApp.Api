@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.IO;
+using MusicApp.Api.Repositories;
 
 namespace MusicApp.Api.Controllers
 {
@@ -13,61 +14,34 @@ namespace MusicApp.Api.Controllers
     public class ApiController : ControllerBase
     {
 
-        private readonly ILogger<ApiController> _logger;
-        private readonly List<Track> _tracks;
+        private readonly IRepository _repo;
 
-        public ApiController(ILogger<ApiController> logger, List<Track> tracks)
+        public ApiController(IRepository repo)
         {
-            _logger = logger;
-            _tracks = tracks;
+            _repo = repo;
         }
 
         [HttpGet, Route("track/{id}")]
         public IActionResult GetAudioFile(string id)
         {
-            // Check if the id exists
-            Track track = _tracks.Find(track => track.Id == id);
-            if (track == null)
-            {
-                return NotFound("No track found for the specified id");
-            }
-
-            // Resolve the file path
-            // Should resolve to {ApplicationPath}/audio/{genre}/{audio.mp3}
-            string relativePath = Path.Combine("audio", track.Genre.ToLower(), track.FileName);
-            string fullPath = PathUtils.GetFilePathFromApplicationPath(relativePath);
-
-            // Return the file stream
-            FileStream stream = System.IO.File.OpenRead(fullPath);
+            Stream stream = _repo.GetAudio(id);
+            if (stream is null) return NotFound();
             return File(stream, "audio/mp3", true);
         }
 
         [HttpGet, Route("image/{id}")]
         public IActionResult GetAudioImage(string id)
         {
-            // Check if the id exists
-            Track track = _tracks.Find(track => track.Id == id);
-            if (track == null)
-            {
-                return NotFound("No track found for the specified id");
-            }
-
-            // Resolve the file path
-            // Should resolve to {ApplicationPath}/images/{genre}/{audio.jpeg}
-            string fileName = Path.GetFileNameWithoutExtension(track.FileName) + ".jpeg";
-            string relativePath = Path.Combine("images", track.Genre.ToLower(), fileName);
-            string fullPath = PathUtils.GetFilePathFromApplicationPath(relativePath);
-
-            // Return the file stream
+            Stream stream = _repo.GetImage(id);
+            if (stream is null) return NotFound();
             string mimeType = System.Net.Mime.MediaTypeNames.Image.Jpeg;
-            FileStream stream = System.IO.File.OpenRead(fullPath);
             return File(stream, mimeType, true);
         }
 
         [HttpGet, Route("tracks")]
         public IActionResult GetAllTracks()
         {
-            return Ok(_tracks.ToArray());
+            return Ok(_repo.GetAllTracks());
         }
     }
 }
