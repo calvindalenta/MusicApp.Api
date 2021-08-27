@@ -40,6 +40,11 @@ namespace MusicApp.Api
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors(builder =>
+            {
+                builder.WithOrigins("http://127.0.0.1:5500").AllowAnyMethod().AllowAnyHeader().AllowCredentials();
+            });
+
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>

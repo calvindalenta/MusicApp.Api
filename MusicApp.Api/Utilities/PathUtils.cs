@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MusicApp.Api
+namespace MusicApp.Api.Utilities
 {
     public static class PathUtils
     {

@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
+using MusicApp.Api.Models;
+using MusicApp.Api.Utilities;
 using System;
 using System.Collections.Generic;
 using System.IO;
