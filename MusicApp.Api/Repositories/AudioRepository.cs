@@ -37,7 +37,6 @@ namespace MusicApp.Api.Repositories
 
             // Resolve the file path
             // Should resolve to {ApplicationPath}/audio/{genre}/{audio.mp3}
-            string relativePath = Path.Combine("audio", track.Genre.ToLower(), track.FileName);
             string fullPath = ResolvePath(track.FileName, "audio", track.Genre.ToLower());
 
             if (!File.Exists(fullPath)) return null;

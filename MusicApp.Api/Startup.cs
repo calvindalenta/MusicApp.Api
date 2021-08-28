@@ -22,6 +22,10 @@ namespace MusicApp.Api
         {
             services.AddControllers();
             services.AddSingleton<IRepository, AudioRepository>();
+            services.AddSpaStaticFiles(config =>
+            {
+                config.RootPath = "dist";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -30,19 +34,27 @@ namespace MusicApp.Api
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-
                 app.UseCors(builder => AllowAllCors(builder));
             } else
             {
                 app.UseCors();
+                app.UseSpaStaticFiles();
             }
-
+            
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
+
+            if (env.IsDevelopment())
+            {
+                app.UseSpa(config =>
+                {
+                    config.UseProxyToSpaDevelopmentServer("http://127.0.0.1:3000/react");
+                });
+            }
         }
 
         // Allow any origin for development purposes

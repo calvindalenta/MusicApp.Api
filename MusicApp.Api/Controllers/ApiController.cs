@@ -13,7 +13,6 @@ namespace MusicApp.Api.Controllers
     [Route("/api")]
     public class ApiController : ControllerBase
     {
-
         private readonly IRepository _repo;
 
         public ApiController(IRepository repo)
