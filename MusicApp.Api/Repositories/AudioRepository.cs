@@ -22,6 +22,12 @@ namespace MusicApp.Api.Repositories
                  );
             var jsonText = File.ReadAllText(jsonPath);
             _tracks = JsonSerializer.Deserialize<List<Track>>(jsonText);
+
+            foreach (var track in _tracks)
+            {
+                track.ImageUrl = $"/api/image/{track.Id}";
+                track.TrackUrl = $"/api/track/{track.Id}";
+            }
         }
 
         public IEnumerable<Track> GetAllTracks()

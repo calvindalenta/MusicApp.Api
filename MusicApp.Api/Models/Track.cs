@@ -25,5 +25,9 @@ namespace MusicApp.Api.Models
 
         [JsonPropertyName("filename")]
         public string FileName { get; set; }
+
+        public string TrackUrl { get; set; }
+
+        public string ImageUrl { get; set; }
     }
 }
