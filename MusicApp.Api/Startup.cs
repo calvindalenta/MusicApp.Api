@@ -20,11 +20,12 @@ namespace MusicApp.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            /*services.AddLettuceEncrypt();*/
             services.AddControllers();
             services.AddSingleton<IRepository, AudioRepository>();
             services.AddSpaStaticFiles(config =>
             {
-                config.RootPath = "dist";
+                config.RootPath = "client";
             });
         }
 
@@ -39,8 +40,11 @@ namespace MusicApp.Api
             {
                 app.UseCors();
                 app.UseSpaStaticFiles();
+                /*app.UseHsts();*/
             }
-            
+
+            /*app.UseHttpsRedirection();*/
+
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
@@ -48,13 +52,16 @@ namespace MusicApp.Api
                 endpoints.MapControllers();
             });
 
-            if (env.IsDevelopment())
+            app.UseSpa(config =>
             {
-                app.UseSpa(config =>
+                /*config.Options.SourcePath = "/";*/
+
+                if (env.IsDevelopment())
                 {
                     config.UseProxyToSpaDevelopmentServer("http://127.0.0.1:3000/react");
-                });
-            }
+                }
+            });
+
         }
 
         // Allow any origin for development purposes
