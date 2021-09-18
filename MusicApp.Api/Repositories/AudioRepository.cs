@@ -70,7 +70,7 @@ namespace MusicApp.Api.Repositories
 
         private string ResolvePath(string fileName, string fileType, string genre)
         {
-            string relativePath = Path.Combine(fileType, genre, fileName);
+            string relativePath = Path.Combine("assets", fileType, genre, fileName);
             string fullPath = PathUtils.GetFilePathFromApplicationPath(relativePath);
             return fullPath;
         }
