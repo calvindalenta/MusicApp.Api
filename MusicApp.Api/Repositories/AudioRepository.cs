@@ -51,8 +51,20 @@ namespace MusicApp.Api.Repositories
             return File.OpenRead(fullPath);
         }
 
+        private Stream GetDefaultImage()
+        {
+            string relativePath = Path.Combine("assets", "images", "default.jpeg");
+            string fullPath = PathUtils.GetFilePathFromApplicationPath(relativePath);
+            return File.OpenRead(fullPath);
+        }
+
         public Stream GetImage(string id)
         {
+            if (id == "default")
+            {
+                return GetDefaultImage();
+            }
+
             // Check if the id exists
             Track track = _tracks.Find(track => track.Id == id);
             if (track == null) return null;
